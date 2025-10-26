@@ -42,7 +42,6 @@ const formSchema = z.object({
 
 type FormData = z.infer<typeof formSchema>;
 
-const API_BASE_URL = "http://localhost:5151/api";
 
 export default function Home() {
   const queryClient = useQueryClient();
@@ -50,14 +49,14 @@ export default function Home() {
   const questions = useQuery({
     queryKey: ["questions"],
     queryFn: async (): Promise<Question[]> => {
-      const res = await axios.get(`${API_BASE_URL}/quiz`);
+      const res = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/api/quiz`);
       return res.data;
     },
   });
 
   const mutation = useMutation({
     mutationFn: async (answers: AnswerPayload[]) => {
-      const res = await axios.post<GradeResponse>(`${API_BASE_URL}/grade`, {
+      const res = await axios.post<GradeResponse>(`${process.env.NEXT_PUBLIC_API_URL}/api/grade`, {
         answers,
       });
       return res.data;
